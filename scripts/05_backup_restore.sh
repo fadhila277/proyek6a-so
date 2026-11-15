@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 SRC_DIR="/srv/proyek6a/shared"
@@ -40,7 +39,11 @@ case "$1" in
         fi
 
         cp -f "$ARCHIVE" "$BACKUP_DIR/latest_backup.tar.gz"
-        sha256sum "$BACKUP_DIR/latest_backup.tar.gz" > "$BACKUP_DIR/latest_backup.tar.gz.sha256"
+
+        if ! sha256sum "$BACKUP_DIR/latest_backup.tar.gz" > "$BACKUP_DIR/latest_backup.tar.gz.sha256"; then
+            log_msg "Checksum backup terbaru gagal dibuat."
+            exit 1
+        fi
 
         log_msg "Backup berhasil dibuat."
         exit 0
@@ -51,27 +54,26 @@ case "$1" in
             bash "$0" backup || exit 1
         fi
 
+        if [ ! -f "$BACKUP_DIR/latest_backup.tar.gz.sha256" ]; then
+            log_msg "File checksum tidak ditemukan."
+            exit 1
+        fi
+
         if sha256sum -c "$BACKUP_DIR/latest_backup.tar.gz.sha256" >/dev/null 2>&1; then
 
-            rm -rf "$RESTORE_DIR"/*
+            find "$RESTORE_DIR" -mindepth 1 -delete
 
             if ! tar -xzf "$BACKUP_DIR/latest_backup.tar.gz" -C "$RESTORE_DIR"; then
                 log_msg "Restore gagal."
                 exit 1
             fi
 
-            for f in "$SRC_DIR"/*; do
-                if [ -f "$f" ]; then
-                    NAME=$(basename "$f")
+            if ! diff -qr "$SRC_DIR" "$RESTORE_DIR" >/dev/null 2>&1; then
+                log_msg "Isi data hasil restore tidak sesuai."
+                exit 1
+            fi
 
-                    if ! cmp -s "$f" "$RESTORE_DIR/$NAME"; then
-                        log_msg "Isi file $NAME tidak sesuai."
-                        exit 1
-                    fi
-                fi
-            done
-
-            log_msg "UJI POSITIF BERHASIL. Data berhasil dipulihkan."
+            log_msg "UJI POSITIF BERHASIL. Data berhasil dipulihkan dan sesuai."
             exit 0
 
         else
@@ -87,7 +89,10 @@ case "$1" in
 
         cp -f "$BACKUP_DIR/latest_backup.tar.gz" "$BACKUP_DIR/corrupt_backup.tar.gz"
 
-        sha256sum "$BACKUP_DIR/corrupt_backup.tar.gz" > "$BACKUP_DIR/corrupt_backup.tar.gz.sha256"
+        if ! sha256sum "$BACKUP_DIR/corrupt_backup.tar.gz" > "$BACKUP_DIR/corrupt_backup.tar.gz.sha256"; then
+            log_msg "Checksum pengujian gagal dibuat."
+            exit 1
+        fi
 
         echo "DATA_RUSAK" >> "$BACKUP_DIR/corrupt_backup.tar.gz"
 
@@ -103,7 +108,8 @@ case "$1" in
     reset)
         rm -f "$BACKUP_DIR/corrupt_backup.tar.gz"
         rm -f "$BACKUP_DIR/corrupt_backup.tar.gz.sha256"
-        rm -rf "$RESTORE_DIR"/*
+
+        find "$RESTORE_DIR" -mindepth 1 -delete
 
         log_msg "File pengujian berhasil dibersihkan."
         exit 0
