@@ -16,3 +16,4 @@
 [2026-11-17 13:26:07] [ANGGOTA-2] UJI NEGATIF: Mengakses share //127.0.0.1/proyek6a_share dengan akun tidak berwenang (user_luar)
 [2026-11-17 13:26:07] [ANGGOTA-2] HASIL NEGATIF LULUS: Akses Samba oleh user_luar ditolak (NT_STATUS_ACCESS_DENIED).
 [2026-11-17 13:26:15] [ANGGOTA-2] RESET: Layanan Samba di-restart kembali ke kondisi normal.
+
