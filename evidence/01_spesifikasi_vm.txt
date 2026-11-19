@@ -1,23 +1,75 @@
-=== OS & KERNEL ===
-Distributor ID:	Ubuntu
-Description:	Ubuntu 26.04.1 LTS
-Release:	26.04
-Codename:	resolute
-7.0.0-43-generic
+SPESIFIKASI VM PENGUJIAN
+Pemilik: Muhammad Mahmud Mahfuz
+2026-11-19T03:24:26+00:00
 
-=== CPU ===
+PRETTY_NAME="Ubuntu 26.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+VERSION="26.04.1 LTS (Resolute Raccoon)"
+VERSION_CODENAME=resolute
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=resolute
+LOGO=ubuntu-logo
+7.0.0-43-generic
+oracle
+
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           48 bits physical, 48 bits virtual
+Byte Order:                              Little Endian
 CPU(s):                                  2
-Model name:                              AMD Ryzen 3 5300U with Radeon Graphics
+On-line CPU(s) list:                     0,1
+Vendor ID:                               AuthenticAMD
+Model name:                              AMD Ryzen 7 5800H with Radeon Graphics
+CPU family:                              25
+Model:                                   80
 Thread(s) per core:                      1
+Core(s) per socket:                      2
 Socket(s):                               1
+Stepping:                                0
+BogoMIPS:                                6388.04
+Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 movbe popcnt aes rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch vmmcall fsgsbase bmi1 bmi2 invpcid rdseed adx clflushopt sha_ni arat debug_swap
+Hypervisor vendor:                       KVM
+Virtualization type:                     full
 NUMA node(s):                            1
 NUMA node0 CPU(s):                       0,1
+Vulnerability Gather data sampling:      Not affected
+Vulnerability Ghostwrite:                Not affected
+Vulnerability Indirect target selection: Not affected
+Vulnerability Itlb multihit:             Not affected
+Vulnerability L1tf:                      Not affected
+Vulnerability Mds:                       Not affected
+Vulnerability Meltdown:                  Not affected
+Vulnerability Mmio stale data:           Not affected
+Vulnerability Old microcode:             Not affected
+Vulnerability Reg file data sampling:    Not affected
+Vulnerability Retbleed:                  Not affected
+Vulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode
+Vulnerability Spec store bypass:         Not affected
+Vulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                     Not affected
+Vulnerability Tsa:                       Vulnerable: No microcode
+Vulnerability Tsx async abort:           Not affected
+Vulnerability Vmscape:                   Not affected
 
-=== RAM ===
                total        used        free      shared  buff/cache   available
-Mem:           3.3Gi       571Mi       1.6Gi       4.2Mi       1.4Gi       2.7Gi
+Mem:           3.3Gi       495Mi       2.5Gi       4.1Mi       594Mi       2.8Gi
 Swap:             0B          0B          0B
 
-=== STORAGE ===
+NAME    SIZE TYPE FSTYPE   MOUNTPOINTS
+loop0  66.8M loop squashfs /snap/core24/1643
+loop1   1.5M loop squashfs /snap/hwctl/123
+loop2   1.5M loop squashfs /snap/hwctl/131
+loop3  50.1M loop squashfs /snap/snapd/27710
+sda      25G disk          
+├─sda1    1M part          
+└─sda2   25G part ext4     /
+sr0    1024M rom           
 Filesystem      Size  Used Avail Use% Mounted on
-/dev/sda2        24G  4.0G   19G  18% /
+/dev/sda2        25G  4.1G   20G  18% /
