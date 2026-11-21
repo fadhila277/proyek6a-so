@@ -1,4 +1,65 @@
 ---
+ANGGOTA 1 — MUHAMMAD IRSYAD ATHALA PASYA (2510512024)
+---
+
+# Portofolio Individu Proyek Akhir Sistem Operasi
+
+## 1. Identitas
+- Nama: Muhammad Irsyad Athala Pasya
+- NIM: 2510512024
+- Kelompok: Kelompok 6A
+- Pilihan Proyek: 6A — Server Berkas Bersama dengan Backup dan Audit Akses
+- Peran: Anggota 1 (User, Group, dan Permission)
+
+## 2. Asal Proyek
+- Tautan Repository Utama Kelompok: https://github.com/fadhila277/proyek6a-so
+- Tautan Repository Pribadi (Fork): https://github.com/irsyad-146/proyek6a-so
+- Daftar Anggota Kelompok:
+  1. Muhammad Irsyad Athala Pasya (2510512024) — User, Group, dan Permission
+  2. Moh Candra Ahnaf Fadhila (2510512030) — Samba dan Klien
+  3. Sastia Rahmadani Azzahra (2510512018) — Hak Pembaca (Read-Only)
+  4. Muhammad Mahmud Mahfuz (2510512004) — Administrasi SSH
+  5. Ruth Keysha Putri Lase (2510512012) — Backup dan Restore
+  6. Salvito Maryanto (2510512034) — Monitoring, Log, Laporan, dan Docker
+
+## 3. Kontribusi Pribadi
+Sebagai Anggota 1, kontribusi teknis dan analisis yang saya kerjakan meliputi:
+- Membangun fondasi manajemen akun dan grup Linux berupa grup `operator` dan `pembaca`, empat akun uji (`admin_os`, `user_op`, `user_ro`, `user_luar`), serta struktur direktori `/srv/proyek6a/shared`, `/srv/proyek6a/backup`, dan `/srv/proyek6a/logs` beserta berkas awal (`dokumen_unit_1.txt` hingga `dokumen_unit_3.txt`).
+- Menerapkan proteksi hak akses berlapis berupa kepemilikan `admin_os:operator`, bit SetGID (`2770` / `drwxrws---`), serta POSIX ACL dan Default ACL (`operator:rwx`, `pembaca:r-x`, `other:---`) pada direktori `/srv/proyek6a/shared`.
+- Mengembangkan dan menguji skrip otomasi `scripts/01_user_perm.sh` yang bersifat *idempotent* dengan parameter `--setup`, `--status`, `--test-pos`, `--test-neg`, dan `--reset`, serta mendokumentasikan bukti eksekusi pada `evidence/01_user_perm.log`.
+
+## 4. Bukti Kontribusi
+- Skrip Utama: `scripts/01_user_perm.sh`
+- Log dan Bukti Uji: `evidence/01_user_perm.log`
+- Riwayat Commit: https://github.com/fadhila277/proyek6a-so/commits/main
+
+## 5. Skenario Pengujian Individu
+- Tujuan: Memastikan akun dalam grup `operator` (`user_op`) dapat membuat dan menulis berkas di `/srv/proyek6a/shared` dengan pewarisan grup otomatis (SetGID `2770`), sementara akun di luar grup (`user_luar`) ditolak sepenuhnya oleh sistem.
+- Prasyarat / Kondisi Awal:
+  Menjalankan `sudo ./scripts/01_user_perm.sh --setup` dan verifikasi awal melalui `sudo ./scripts/01_user_perm.sh --status` untuk memastikan grup (`operator`, `pembaca`), empat akun uji (`admin_os`, `user_op`, `user_ro`, `user_luar`), izin `drwxrws---`, aturan POSIX ACL, dan berkas `dokumen_unit_1.txt` hingga `dokumen_unit_3.txt` telah aktif.
+- Langkah Uji Positif (`--test-pos`):
+  Menjalankan `sudo ./scripts/01_user_perm.sh --test-pos` agar akun `user_op` menulis berkas `/srv/proyek6a/shared/laporan_operator.txt`, dilanjutkan verifikasi pembacaan isi berkas dengan `sudo -u user_op cat /srv/proyek6a/shared/laporan_operator.txt`.
+  Hasil Aktual: Berkas berhasil dibuat dengan kepemilikan grup `operator`, teks `Laporan operator` terbaca dengan benar, dan skrip menghasilkan exit status `0`.
+- Langkah Uji Negatif (`--test-neg`):
+  Menjalankan `sudo ./scripts/01_user_perm.sh --test-neg` untuk menguji percobaan penulisan berkas `/srv/proyek6a/shared/ilegal_user_luar.txt` oleh akun `user_luar` yang berada di luar grup `operator` dan `pembaca`.
+  Hasil Aktual: Akses ditolak oleh Kernel Linux dengan pesan `Permission denied` dan skrip menghasilkan exit status non-nol (`1`).
+- Verifikasi dan Pemulihan (`--reset`):
+  Memeriksa catatan waktu serta hasil eksekusi pada `evidence/01_user_perm.log`, lalu menjalankan `sudo ./scripts/01_user_perm.sh --reset` untuk menghapus berkas sisa uji sehingga `/srv/proyek6a/shared` kembali bersih dengan exit status `0`.
+
+## 6. Analisis Konsep Sistem Operasi
+- Autentikasi dan Manajemen Identitas: Identitas akun dan direktori *home* dikelola pada `/etc/passwd`, kata sandi terenkripsi disimpan terpisah pada `/etc/shadow`, dan keanggotaan grup dipetakan melalui `/etc/group`.
+- Otorisasi, SetGID (2770), dan POSIX ACL: Izin standar POSIX hanya mendukung satu grup per objek sehingga tidak cukup untuk membedakan hak baca-tulis `operator` (`rwx`) dan hak baca-saja `pembaca` (`r-x`) pada direktori yang sama. Penerapan POSIX ACL dan Default ACL menyelesaikan batasan ini tanpa membuka akses publik (`other::---`), sementara bit SetGID (`2770`) memastikan setiap berkas baru otomatis mewarisi grup `operator`.
+- Exit Status dan Pencatatan Log: Kode keluar `0` menandakan eksekusi dan izin akses valid, sedangkan kode keluar non-nol (`1`) menandakan kegagalan atau penolakan akses dari kernel. Seluruh kejadian direkam beserta stempel waktu ke berkas log untuk kebutuhan audit.
+
+## 7. Kendala dan Penyelesaian
+- Kendala: Saat menyalin kode dari lingkungan Windows ke VM muncul kesalahan sintaks akibat karakter akhiran baris (`CRLF`), terjadi konflik *untracked file* (`output/laporan.txt`) ketika menjalankan `git pull`, serta muncul pesan `Permission denied` saat menjalankan perintah `cat` langsung memakai akun `vboxuser` pada tahap verifikasi uji positif.
+- Penyelesaian: Membersihkan format baris skrip dengan `sed` dan memvalidasi sintaks memakai `bash -n`, menyinkronkan *branch* `main` setelah menghapus berkas lokal yang bentrok, serta menjalankan perintah baca memakai akun berwenang (`sudo -u user_op cat`) yang sekaligus membuktikan proteksi `other::---` berjalan efektif.
+
+## 8. Refleksi
+- Hal yang Sudah Dikuasai: Manajemen akun pengguna dan grup Linux, penerapan proteksi *filesystem* berlapis menggunakan SetGID (`2770`) dan POSIX ACL (`setfacl`/`getfacl`), penyusunan skrip Bash *idempotent* untuk pengujian positif/negatif, evaluasi *exit status*, serta kolaborasi repositori Git.
+- Hal yang Masih Perlu Dipelajari: Penerapan kontrol akses tingkat lanjut (*Mandatory Access Control*) seperti AppArmor atau SELinux pada server produksi, manajemen kebijakan ACL berskala besar secara terpusat, serta integrasi audit keamanan sistem (`auditd`) lintas layanan.
+
+---
 ANGGOTA 2 — MOH CANDRA AHNAF FADHILA (2510512030)
 ---
 
