@@ -1,0 +1,52 @@
+=== BUKTI PENGUJIAN ANGGOTA 1 (USER, GROUP, DAN PERMISSION) ===
+uid=1001(admin_os) gid=1002(admin_os) groups=1002(admin_os),27(sudo),37(operator)
+uid=1002(user_op) gid=1003(user_op) groups=1003(user_op),37(operator)
+uid=1003(user_ro) gid=1004(user_ro) groups=1004(user_ro),1001(pembaca)
+uid=1004(user_luar) gid=1005(user_luar) groups=1005(user_luar)
+drwxr-xr-x  5 admin_os operator 4096 Nov 15 08:22 /srv/proyek6a
+drwxrws---  2 admin_os operator 4096 Nov 15 08:22 /srv/proyek6a/backup
+drwxrws---+ 2 admin_os operator 4096 Nov 21 18:20 /srv/proyek6a/shared
+# file: /srv/proyek6a/shared
+# owner: admin_os
+# group: operator
+# flags: -s-
+user::rwx
+user:admin_os:rwx
+group::rwx
+group:operator:rwx
+group:pembaca:r-x
+mask::rwx
+other::---
+default:user::rwx
+default:user:admin_os:rwx
+default:group::rwx
+default:group:operator:rwx
+default:group:pembaca:r-x
+default:mask::rwx
+default:other::---
+
+[2026-11-21 18:36:41] [INFO] Memulai setup fondasi User, Group, dan Permission 6A
+[2026-11-21 18:36:41] [INFO] Direktori sudah ada: /srv/proyek6a
+[2026-11-21 18:36:41] [INFO] Direktori sudah ada: /srv/proyek6a/shared
+[2026-11-21 18:36:41] [INFO] Direktori sudah ada: /srv/proyek6a/backup
+[2026-11-21 18:36:41] [INFO] Direktori sudah ada: /srv/proyek6a/logs
+[2026-11-21 18:36:41] [INFO] Direktori sudah ada: /home/vboxuser/proyek6a-so/output
+[2026-11-21 18:36:41] [INFO] Grup sudah ada: operator
+[2026-11-21 18:36:41] [INFO] Grup sudah ada: pembaca
+[2026-11-21 18:36:41] [INFO] Akun sudah ada: admin_os
+[2026-11-21 18:36:41] [INFO] Akun sudah ada: user_op
+[2026-11-21 18:36:41] [INFO] Akun sudah ada: user_ro
+[2026-11-21 18:36:41] [INFO] Akun sudah ada: user_luar
+[2026-11-21 18:36:41] [INFO] Pemetaan grup selesai diatur.
+[2026-11-21 18:36:41] [INFO] Permission SetGID 2770 dan ACL diterapkan pada /srv/proyek6a/shared
+[2026-11-21 18:36:41] [INFO] Berkas dummy dibuat: /srv/proyek6a/shared/dokumen_unit_1.txt
+[2026-11-21 18:36:41] [INFO] Berkas dummy dibuat: /srv/proyek6a/shared/dokumen_unit_2.txt
+[2026-11-21 18:36:41] [INFO] Berkas dummy dibuat: /srv/proyek6a/shared/dokumen_unit_3.txt
+[2026-11-21 18:36:41] [SUCCESS] Setup fondasi Anggota 1 selesai.
+[2026-11-21 18:36:41] [INFO] Uji Positif: Operator menulis berkas
+[2026-11-21 18:36:42] [SUCCESS] POSITIF LULUS: user_op berhasil menulis ke /srv/proyek6a/shared/laporan_operator.txt
+-rw-rw----+ 1 user_op operator 17 Nov 21 18:36 /srv/proyek6a/shared/laporan_operator.txt
+Laporan operator
+[2026-11-21 18:36:42] [INFO] Uji Negatif: Pengguna luar grup ditolak
+[2026-11-21 18:36:42] [SUCCESS] NEGATIF LULUS: Akses user_luar ditolak dengan Exit Status 1
+[2026-11-21 18:36:42] [SUCCESS] Kondisi direktori shared berhasil direset.
